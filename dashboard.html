@@ -3,286 +3,366 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Social Media Dashboard</title>
+<title>Social Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
-:root{--bg:#ffffff;--bg2:#f7f7f5;--bg3:#f0efe9;--text:#1a1a1a;--text2:#6b6b6b;--text3:#a0a0a0;--border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);--info-bg:#e6f1fb;--info-text:#0c447c;--success-bg:#eaf3de;--success-text:#27500a;--warn-bg:#faeeda;--warn-text:#633806;--danger-bg:#fcebeb;--danger-text:#791f1f;--radius:8px;--radius-lg:12px;--yt:#ff0000;--tt:#000000;--ig:#e1306c}
-@media(prefers-color-scheme:dark){:root{--bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--text:#f5f5f0;--text2:#aeaead;--text3:#6e6e70;--border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);--info-bg:#042c53;--info-text:#85b7eb;--success-bg:#173404;--success-text:#97c459;--warn-bg:#412402;--warn-text:#fac775;--danger-bg:#501313;--danger-text:#f09595}}
+:root{--bg:#0d0d0f;--bg2:#141416;--bg3:#1a1a1d;--bg4:#202024;--text:#f0efe8;--text2:#8a8a8a;--text3:#4a4a4a;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--accent:#e8ff47;--radius:6px;--radius-lg:10px;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--serif:'Instrument Serif',serif}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh}
-.app{max-width:900px;margin:0 auto;padding:1.5rem 1rem 4rem}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:0.5px solid var(--border)}
-.logo{display:flex;align-items:center;gap:12px}
-.logo-icon{width:40px;height:40px;background:var(--text);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--bg);font-size:20px}
-.logo-text{font-size:16px;font-weight:600}
-.logo-sub{font-size:11px;color:var(--text3);margin-top:1px}
-.editor-link{font-size:12px;padding:6px 14px;border-radius:100px;border:0.5px solid var(--border2);color:var(--text2);display:flex;align-items:center;gap:6px;text-decoration:none;background:var(--bg);transition:.15s}
-.editor-link:hover{background:var(--bg2);color:var(--text)}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+.app{max-width:960px;margin:0 auto;padding:28px 20px 80px}
 
-.section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:12px}
-.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1rem}
-.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-bottom:20px;border-bottom:0.5px solid var(--border)}
+.logo-row{display:flex;align-items:center;gap:12px}
+.logo-sq{width:36px;height:36px;background:var(--accent);border-radius:var(--radius);display:flex;align-items:center;justify-content:center}
+.logo-sq i{font-size:18px;color:#000}
+.logo-name{font-size:15px;font-weight:600}
+.logo-sub{font-size:10px;color:var(--text3);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.editor-btn{display:flex;align-items:center;gap:7px;padding:8px 14px;background:var(--accent);color:#000;border:none;border-radius:var(--radius);font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;transition:opacity .12s;font-family:var(--sans)}
+.editor-btn:hover{opacity:.85}
+.refresh-btn{display:flex;align-items:center;gap:6px;padding:7px 12px;background:none;border:0.5px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;transition:.12s;font-family:var(--sans)}
+.refresh-btn:hover{background:var(--bg3);color:var(--text)}
 
-/* Stats */
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.5rem}
-.stat{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px}
-.stat-icon{font-size:20px;margin-bottom:8px}
-.stat-val{font-size:26px;font-weight:600;line-height:1;margin-bottom:4px}
-.stat-lbl{font-size:11px;color:var(--text2)}
-.stat-delta{font-size:11px;margin-top:5px;display:flex;align-items:center;gap:3px}
-.stat-delta.up{color:var(--success-text)}
-.stat-delta.down{color:var(--danger-text)}
+/* SECTION */
+.sec-label{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
 
-/* Platform row */
-.plat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:1.5rem}
-.plat-stat{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px}
-.plat-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:0.5px solid var(--border)}
-.plat-icon{width:32px;height:32px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:16px;color:white}
+/* STAT CARDS */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+@media(max-width:600px){.stat-row{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px}
+.sc-icon{font-size:18px;margin-bottom:10px;display:block}
+.sc-val{font-size:26px;font-weight:600;line-height:1;margin-bottom:3px}
+.sc-lbl{font-size:11px;color:var(--text2)}
+.sc-delta{font-size:11px;margin-top:6px;color:var(--text3)}
+.sc-delta.up{color:#22c55e}
+
+/* PLATFORM CARDS */
+.plat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+@media(max-width:600px){.plat-row{grid-template-columns:1fr}}
+.plat-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px}
+.plat-head{display:flex;align-items:center;gap:10px;padding-bottom:10px;margin-bottom:10px;border-bottom:0.5px solid var(--border)}
+.plat-ico{width:30px;height:30px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:15px;color:white;flex-shrink:0}
 .plat-name{font-size:13px;font-weight:500}
-.plat-handle{font-size:11px;color:var(--text3)}
-.plat-metrics{}
-.pm-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--border);font-size:12px}
-.pm-row:last-child{border-bottom:none}
-.pm-lbl{color:var(--text2)}
-.pm-val{font-weight:500}
+.plat-handle{font-size:10px;color:var(--text3)}
+.pm{display:flex;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid var(--border);font-size:12px}
+.pm:last-child{border-bottom:none}
+.pm-k{color:var(--text2)}
+.pm-v{font-weight:500;font-family:var(--mono);font-size:11px}
 
-/* Videos table */
-.video-table{width:100%;border-collapse:collapse;font-size:13px}
-.video-table th{text-align:left;padding:8px 10px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);border-bottom:0.5px solid var(--border)}
-.video-table td{padding:10px;border-bottom:0.5px solid var(--border);vertical-align:top}
-.video-table tr:last-child td{border-bottom:none}
-.video-table tr:hover td{background:var(--bg2)}
-.vt-title{font-weight:500;margin-bottom:3px}
-.vt-date{font-size:11px;color:var(--text3)}
-.plat-pip{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:100px;font-size:10px;font-weight:500;margin-right:3px}
-.plat-pip.yt{background:#fff1f1;color:#cc0000;border:0.5px solid #ffaaaa}
-.plat-pip.tt{background:#f0f0f0;color:#000;border:0.5px solid #ccc}
-.plat-pip.ig{background:#fff0f5;color:#c0245a;border:0.5px solid #f4a0c0}
-.status-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:100px;font-size:11px;font-weight:500}
-.status-draft{background:var(--warn-bg);color:var(--warn-text)}
-.status-ready{background:var(--info-bg);color:var(--info-text)}
-.status-published{background:var(--success-bg);color:var(--success-text)}
-.btn-sm{padding:5px 11px;font-size:11px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text2);cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:.15s;font-family:inherit}
-.btn-sm:hover{background:var(--bg2);color:var(--text)}
-.btn-primary{padding:9px 18px;font-size:13px;font-weight:500;border:none;border-radius:var(--radius);background:var(--text);color:var(--bg);cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:opacity .15s}
-.btn-primary:hover{opacity:.85}
+/* CHART */
+.chart-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:20px}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.chart-title{font-size:12px;font-weight:500}
+.chart-bars{height:100px;display:flex;align-items:flex-end;gap:4px;padding:0 2px}
+.cbar{flex:1;border-radius:2px 2px 0 0;min-width:4px;transition:.3s;cursor:pointer;position:relative}
+.cbar:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--bg4);color:var(--text);font-size:10px;padding:3px 7px;border-radius:3px;white-space:nowrap;pointer-events:none;font-family:var(--mono)}
+.chart-xlabels{display:flex;gap:4px;margin-top:5px;padding:0 2px}
+.cxl{flex:1;font-size:9px;color:var(--text3);text-align:center;overflow:hidden}
 
-/* Chart */
-.chart-wrap{height:120px;display:flex;align-items:flex-end;gap:4px;padding:0 4px}
-.bar{flex:1;border-radius:3px 3px 0 0;min-width:6px;transition:.3s}
-.chart-labels{display:flex;gap:4px;padding:4px 4px 0;margin-top:4px}
-.chart-lbl{flex:1;font-size:9px;color:var(--text3);text-align:center;overflow:hidden}
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
 
-/* Feeds */
-.feed-item{display:flex;gap:12px;padding:12px 0;border-bottom:0.5px solid var(--border)}
+/* TABLES */
+.data-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px}
+.data-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.data-title{font-size:12px;font-weight:500}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:left;padding:6px 0;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);border-bottom:0.5px solid var(--border)}
+.tbl td{padding:9px 0;border-bottom:0.5px solid var(--border);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.vid-title{font-weight:500;margin-bottom:2px}
+.vid-date{font-size:10px;color:var(--text3)}
+.pip{display:inline-flex;align-items:center;padding:2px 6px;border-radius:100px;font-size:10px;font-weight:500;margin-right:2px}
+.pip.yt{background:rgba(255,0,0,.1);color:#ff6666}
+.pip.tt{background:rgba(255,255,255,.06);color:#ccc}
+.pip.ig{background:rgba(225,48,108,.1);color:#e1306c}
+
+/* STATUS */
+.st{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:100px;font-size:10px;font-weight:600}
+.st-editing{background:rgba(245,158,11,.12);color:#f59e0b}
+.st-ready{background:rgba(59,130,246,.12);color:#3b82f6}
+.st-published{background:rgba(34,197,94,.12);color:#22c55e}
+.st-draft{background:rgba(100,100,100,.15);color:#888}
+
+/* FEED */
+.feed-item{display:flex;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--border)}
 .feed-item:last-child{border-bottom:none}
-.feed-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.feed-dot.yt{background:var(--yt)}
-.feed-dot.tt{background:var(--tt)}
-.feed-dot.ig{background:var(--ig)}
-.feed-dot.system{background:var(--text3)}
-.feed-text{font-size:13px;line-height:1.5;flex:1}
-.feed-time{font-size:11px;color:var(--text3);flex-shrink:0;margin-top:1px}
+.feed-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.feed-dot.yt{background:#ff0000}
+.feed-dot.tt{background:#ccc}
+.feed-dot.ig{background:#e1306c}
+.feed-dot.sys{background:var(--text3)}
+.feed-txt{font-size:12px;line-height:1.5;flex:1;color:var(--text2)}
+.feed-time{font-size:10px;color:var(--text3);flex-shrink:0;font-family:var(--mono)}
 
-.empty-notice{text-align:center;padding:2rem;color:var(--text3);font-size:13px}
-.empty-notice i{font-size:32px;display:block;margin-bottom:10px}
+/* SETTINGS */
+.settings-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:20px}
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+label.lbl{font-size:11px;color:var(--text2);display:block;margin-bottom:4px}
+.inp{width:100%;padding:7px 10px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg3);color:var(--text);font-size:12px;font-family:var(--sans)}
+.inp:focus{outline:none;border-color:rgba(232,255,71,.3)}
+.inp::placeholder{color:var(--text3)}
 
-.sep{border:none;border-top:0.5px solid var(--border);margin:1.5rem 0}
+/* PUBLISH QUEUE */
+.pq{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border-radius:var(--radius);margin-bottom:6px;border:0.5px solid var(--border)}
+.pq-ico{width:26px;height:26px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pq-info{flex:1}
+.pq-title{font-size:12px;font-weight:500}
+.pq-meta{font-size:10px;color:var(--text3);margin-top:1px}
+.btn-pub-sm{padding:5px 10px;font-size:11px;font-weight:600;border:none;border-radius:var(--radius);cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-family:var(--sans)}
+.btn-pub-sm.yt{background:#ff0000;color:white}
+.btn-pub-sm.tt{background:#111;color:white;border:0.5px solid #444}
+.btn-pub-sm.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743);color:white}
+.btn-pub-sm:hover{opacity:.8}
+.btn-pub-sm:disabled{opacity:.3;cursor:not-allowed}
+.spinner-s{width:10px;height:10px;border:1.5px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:560px){.two-col{grid-template-columns:1fr}}
+.empty-msg{text-align:center;padding:28px;color:var(--text3);font-size:12px}
+.empty-msg i{font-size:28px;display:block;margin-bottom:8px;opacity:.3}
 
-.refresh-btn{font-size:11px;display:flex;align-items:center;gap:4px;background:none;border:none;color:var(--text3);cursor:pointer}
-.refresh-btn:hover{color:var(--text)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--accent);color:#000;padding:9px 16px;border-radius:var(--radius);font-size:12px;font-weight:600;opacity:0;transition:.2s;pointer-events:none;z-index:999}
 </style>
 </head>
 <body>
 <div class="app">
+
   <div class="topbar">
-    <div class="logo">
-      <div class="logo-icon"><i class="ti ti-chart-bar"></i></div>
-      <div><div class="logo-text">Social Dashboard</div><div class="logo-sub">Metrics & publishing tracker</div></div>
+    <div class="logo-row">
+      <div class="logo-sq"><i class="ti ti-chart-bar"></i></div>
+      <div><div class="logo-name">Social Dashboard</div><div class="logo-sub">Metrics & publishing tracker</div></div>
     </div>
-    <a class="editor-link" href="index.html" id="editor-link"><i class="ti ti-movie"></i> Open video editor</a>
-  </div>
-
-  <!-- Overall stats -->
-  <div class="section-title">Overall performance</div>
-  <div class="stat-grid" id="overall-stats">
-    <div class="stat"><div class="stat-icon"><i class="ti ti-video" style="color:var(--text2)"></i></div><div class="stat-val" id="s-videos">0</div><div class="stat-lbl">Videos produced</div><div class="stat-delta up" id="s-videos-d"></div></div>
-    <div class="stat"><div class="stat-icon"><i class="ti ti-brand-youtube" style="color:#ff0000"></i></div><div class="stat-val" id="s-yt">0</div><div class="stat-lbl">YouTube exports</div><div class="stat-delta" id="s-yt-d"></div></div>
-    <div class="stat"><div class="stat-icon"><i class="ti ti-brand-tiktok"></i></div><div class="stat-val" id="s-tt">0</div><div class="stat-lbl">TikTok exports</div><div class="stat-delta" id="s-tt-d"></div></div>
-    <div class="stat"><div class="stat-icon"><i class="ti ti-brand-instagram" style="color:#e1306c"></i></div><div class="stat-val" id="s-ig">0</div><div class="stat-lbl">Instagram exports</div><div class="stat-delta" id="s-ig-d"></div></div>
-  </div>
-
-  <!-- Platform breakdown -->
-  <div class="section-title">Platform accounts</div>
-  <div class="plat-row">
-    <div class="plat-stat">
-      <div class="plat-header"><div class="plat-icon" style="background:#ff0000"><i class="ti ti-brand-youtube"></i></div><div><div class="plat-name">YouTube</div><div class="plat-handle" id="yt-handle">@yourchannel</div></div></div>
-      <div class="plat-metrics">
-        <div class="pm-row"><span class="pm-lbl">Subscribers</span><span class="pm-val" id="yt-subs">—</span></div>
-        <div class="pm-row"><span class="pm-lbl">Total views</span><span class="pm-val" id="yt-views">—</span></div>
-        <div class="pm-row"><span class="pm-lbl">Avg watch time</span><span class="pm-val" id="yt-watch">—</span></div>
-        <div class="pm-row"><span class="pm-lbl">Videos uploaded</span><span class="pm-val" id="yt-count">0</span></div>
-      </div>
-    </div>
-    <div class="plat-stat">
-      <div class="plat-header"><div class="plat-icon" style="background:#000"><i class="ti ti-brand-tiktok"></i></div><div><div class="plat-name">TikTok</div><div class="plat-handle" id="tt-handle">@yourhandle</div></div></div>
-      <div class="plat-metrics">
-        <div class="pm-row"><span class="pm-lbl">Followers</span><span class="pm-val" id="tt-followers">—</span></div>
-        <div class="pm-row"><span class="pm-lbl">Total views</span><span class="pm-val" id="tt-views">—</span></div>
-        <div class="pm-row"><span class="pm-lbl">Avg engagement</span><span class="pm-val" id="tt-eng">—</span></div>
-        <div class="pm-row"><span class="pm-lbl">Videos uploaded</span><span class="pm-val" id="tt-count">0</span></div>
-      </div>
-    </div>
-    <div class="plat-stat">
-      <div class="plat-header"><div class="plat-icon" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)"><i class="ti ti-brand-instagram"></i></div><div><div class="plat-name">Instagram</div><div class="plat-handle" id="ig-handle">@yourprofile</div></div></div>
-      <div class="plat-metrics">
-        <div class="pm-row"><span class="pm-lbl">Followers</span><span class="pm-val" id="ig-followers">—</span></div>
-        <div class="pm-row"><span class="pm-lbl">Reel views</span><span class="pm-val" id="ig-views">—</span></div>
-        <div class="pm-row"><span class="pm-lbl">Avg reach</span><span class="pm-val" id="ig-reach">—</span></div>
-        <div class="pm-row"><span class="pm-lbl">Reels uploaded</span><span class="pm-val" id="ig-count">0</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Upload activity chart -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">Production activity (last 8 weeks)</span>
+    <div class="topbar-right">
       <button class="refresh-btn" onclick="renderAll()"><i class="ti ti-refresh"></i> Refresh</button>
+      <a class="editor-btn" href="index.html" id="editor-link"><i class="ti ti-movie"></i> Video editor</a>
     </div>
-    <div class="chart-wrap" id="chart-bars"></div>
-    <div class="chart-labels" id="chart-labels"></div>
   </div>
 
+  <!-- OVERVIEW STATS -->
+  <div class="sec-label">Overview</div>
+  <div class="stat-row">
+    <div class="stat-card"><i class="sc-icon ti ti-video" style="color:var(--accent)"></i><div class="sc-val" id="s-total">0</div><div class="sc-lbl">Videos produced</div><div class="sc-delta up" id="s-total-d"></div></div>
+    <div class="stat-card"><i class="sc-icon ti ti-brand-youtube" style="color:#ff0000"></i><div class="sc-val" id="s-yt">0</div><div class="sc-lbl">YouTube</div><div class="sc-delta" id="s-yt-d"></div></div>
+    <div class="stat-card"><i class="sc-icon ti ti-brand-tiktok"></i><div class="sc-val" id="s-tt">0</div><div class="sc-lbl">TikTok</div><div class="sc-delta" id="s-tt-d"></div></div>
+    <div class="stat-card"><i class="sc-icon ti ti-brand-instagram" style="color:#e1306c"></i><div class="sc-val" id="s-ig">0</div><div class="sc-lbl">Instagram</div><div class="sc-delta" id="s-ig-d"></div></div>
+  </div>
+
+  <!-- PLATFORM ACCOUNTS -->
+  <div class="sec-label">Platform accounts</div>
+  <div class="plat-row">
+    <div class="plat-card">
+      <div class="plat-head"><div class="plat-ico" style="background:#ff0000"><i class="ti ti-brand-youtube"></i></div><div><div class="plat-name">YouTube</div><div class="plat-handle" id="h-yt">@yourchannel</div></div></div>
+      <div class="pm"><span class="pm-k">Videos exported</span><span class="pm-v" id="pm-yt-c">0</span></div>
+      <div class="pm"><span class="pm-k">Published</span><span class="pm-v" id="pm-yt-p">0</span></div>
+      <div class="pm"><span class="pm-k">Connection</span><span class="pm-v" id="pm-yt-conn" style="font-family:var(--sans);font-size:11px">—</span></div>
+    </div>
+    <div class="plat-card">
+      <div class="plat-head"><div class="plat-ico" style="background:#111;border:0.5px solid #444"><i class="ti ti-brand-tiktok"></i></div><div><div class="plat-name">TikTok</div><div class="plat-handle" id="h-tt">@yourhandle</div></div></div>
+      <div class="pm"><span class="pm-k">Videos exported</span><span class="pm-v" id="pm-tt-c">0</span></div>
+      <div class="pm"><span class="pm-k">Published</span><span class="pm-v" id="pm-tt-p">0</span></div>
+      <div class="pm"><span class="pm-k">Connection</span><span class="pm-v" id="pm-tt-conn" style="font-family:var(--sans);font-size:11px">—</span></div>
+    </div>
+    <div class="plat-card">
+      <div class="plat-head"><div class="plat-ico" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)"><i class="ti ti-brand-instagram"></i></div><div><div class="plat-name">Instagram</div><div class="plat-handle" id="h-ig">@yourprofile</div></div></div>
+      <div class="pm"><span class="pm-k">Reels exported</span><span class="pm-v" id="pm-ig-c">0</span></div>
+      <div class="pm"><span class="pm-k">Published</span><span class="pm-v" id="pm-ig-p">0</span></div>
+      <div class="pm"><span class="pm-k">Connection</span><span class="pm-v" id="pm-ig-conn" style="font-family:var(--sans);font-size:11px">—</span></div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">Production activity — last 8 weeks</span>
+      <span style="font-size:10px;color:var(--text3)" id="chart-total-label"></span>
+    </div>
+    <div class="chart-bars" id="chart-bars"></div>
+    <div class="chart-xlabels" id="chart-xlabels"></div>
+  </div>
+
+  <!-- VIDEO TABLE + FEED -->
   <div class="two-col">
-    <!-- Recent videos -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Recent video exports</span>
-        <a href="index.html" style="font-size:11px;color:var(--info-text);text-decoration:none;display:flex;align-items:center;gap:4px"><i class="ti ti-plus" style="font-size:12px"></i> New video</a>
+    <div class="data-card">
+      <div class="data-header">
+        <span class="data-title">Video tracker</span>
+        <a href="index.html" style="font-size:11px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:4px"><i class="ti ti-plus" style="font-size:11px"></i> New</a>
       </div>
-      <div id="video-list"><div class="empty-notice"><i class="ti ti-video-off"></i><p>No videos yet.<br>Run the editor and send to dashboard.</p></div></div>
+      <div id="video-table"><div class="empty-msg"><i class="ti ti-video-off"></i>No videos yet.<br>Run the editor and send to dashboard.</div></div>
     </div>
-
-    <!-- Activity feed -->
-    <div class="card">
-      <div class="card-header"><span class="card-title">Activity feed</span></div>
-      <div id="activity-feed"><div class="empty-notice"><i class="ti ti-list"></i><p>Activity will appear here<br>as you produce content.</p></div></div>
+    <div class="data-card">
+      <div class="data-header"><span class="data-title">Activity feed</span></div>
+      <div id="activity-feed"><div class="empty-msg"><i class="ti ti-list"></i>Activity will appear as<br>you produce content.</div></div>
     </div>
   </div>
 
-  <!-- Settings -->
-  <div class="card">
-    <div class="card-header"><span class="card-title">Account handles</span><span style="font-size:11px;color:var(--text3)">Edit to personalize your dashboard</span></div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
-      <div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">YouTube handle</label><input id="set-yt" style="width:100%;padding:7px 10px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit" placeholder="@yourchannel" oninput="saveHandles()"></div>
-      <div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">TikTok handle</label><input id="set-tt" style="width:100%;padding:7px 10px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit" placeholder="@yourhandle" oninput="saveHandles()"></div>
-      <div><label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px">Instagram handle</label><input id="set-ig" style="width:100%;padding:7px 10px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit" placeholder="@yourprofile" oninput="saveHandles()"></div>
+  <!-- PUBLISH QUEUE -->
+  <div class="sec-label">Publish queue</div>
+  <div class="data-card" style="margin-bottom:20px">
+    <div class="data-header">
+      <span class="data-title">Ready to publish</span>
+      <button onclick="clearPub()" style="font-size:11px;color:var(--text3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-trash" style="font-size:12px"></i> Clear published</button>
+    </div>
+    <div id="pub-queue"><div class="empty-msg" style="padding:16px"><i class="ti ti-inbox"></i>No items in queue.<br>Run the editor to queue videos.</div></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="sec-label">Settings</div>
+  <div class="settings-card">
+    <div style="font-size:12px;font-weight:500;margin-bottom:12px">Account handles</div>
+    <div class="settings-grid">
+      <div><label class="lbl">YouTube</label><input class="inp" id="set-yt" placeholder="@yourchannel" oninput="saveHandles()"></div>
+      <div><label class="lbl">TikTok</label><input class="inp" id="set-tt" placeholder="@yourhandle" oninput="saveHandles()"></div>
+      <div><label class="lbl">Instagram</label><input class="inp" id="set-ig" placeholder="@yourprofile" oninput="saveHandles()"></div>
     </div>
   </div>
+
 </div>
+<div class="toast" id="toast"></div>
 
 <script>
-const PLAT_LABELS={yt:'YouTube',tt:'TikTok',ig:'Instagram'};
+const PM={yt:{label:'YouTube'},tt:{label:'TikTok'},ig:{label:'Instagram'}};
+
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.style.opacity=1;setTimeout(()=>el.style.opacity=0,2000);}
+function getRuns(){return JSON.parse(localStorage.getItem('dc_runs')||'[]');}
+function getQueue(){return JSON.parse(localStorage.getItem('dc_queue')||'[]');}
+function getTokens(){return JSON.parse(localStorage.getItem('dc_tokens')||'{}');}
 
 function loadHandles(){
   const h=JSON.parse(localStorage.getItem('dc_handles')||'{}');
   ['yt','tt','ig'].forEach(p=>{
     const v=h[p]||'';
-    const el=document.getElementById('set-'+p);if(el)el.value=v;
-    const hdEl=document.getElementById(p+'-handle');if(hdEl&&v)hdEl.textContent=v;
+    const si=document.getElementById('set-'+p);if(si)si.value=v;
+    const hi=document.getElementById('h-'+p);if(hi&&v)hi.textContent=v;
   });
 }
-
 function saveHandles(){
   const h={yt:document.getElementById('set-yt').value,tt:document.getElementById('set-tt').value,ig:document.getElementById('set-ig').value};
   localStorage.setItem('dc_handles',JSON.stringify(h));
   loadHandles();
 }
 
-function getRuns(){return JSON.parse(localStorage.getItem('dc_runs')||'[]');}
-
-function renderStats(runs){
-  const total=runs.length;
-  const ytC=runs.filter(r=>r.platforms&&r.platforms.includes('yt')).length;
-  const ttC=runs.filter(r=>r.platforms&&r.platforms.includes('tt')).length;
-  const igC=runs.filter(r=>r.platforms&&r.platforms.includes('ig')).length;
-  document.getElementById('s-videos').textContent=total;
+function renderStats(runs,queue,tokens){
+  const t=runs.length;
+  const ytC=runs.filter(r=>r.platforms?.includes('yt')).length;
+  const ttC=runs.filter(r=>r.platforms?.includes('tt')).length;
+  const igC=runs.filter(r=>r.platforms?.includes('ig')).length;
+  const ytP=queue.filter(q=>q.platform==='yt'&&q.status==='published').length;
+  const ttP=queue.filter(q=>q.platform==='tt'&&q.status==='published').length;
+  const igP=queue.filter(q=>q.platform==='ig'&&q.status==='published').length;
+  document.getElementById('s-total').textContent=t;
   document.getElementById('s-yt').textContent=ytC;
   document.getElementById('s-tt').textContent=ttC;
   document.getElementById('s-ig').textContent=igC;
-  document.getElementById('yt-count').textContent=ytC;
-  document.getElementById('tt-count').textContent=ttC;
-  document.getElementById('ig-count').textContent=igC;
-  if(total>0){document.getElementById('s-videos-d').innerHTML='<i class="ti ti-arrow-up-right" style="font-size:11px"></i> '+total+' total produced';}
+  if(t)document.getElementById('s-total-d').innerHTML=`<i class="ti ti-arrow-up-right" style="font-size:10px"></i> ${t} total`;
+  document.getElementById('pm-yt-c').textContent=ytC;document.getElementById('pm-yt-p').textContent=ytP;
+  document.getElementById('pm-tt-c').textContent=ttC;document.getElementById('pm-tt-p').textContent=ttP;
+  document.getElementById('pm-ig-c').textContent=igC;document.getElementById('pm-ig-p').textContent=igP;
+  const connStatus=(p)=>tokens[p]?`<span style="color:#22c55e">${tokens[p].handle||'Connected'}</span>`:'<span style="color:var(--text3)">Not connected</span>';
+  document.getElementById('pm-yt-conn').innerHTML=connStatus('yt');
+  document.getElementById('pm-tt-conn').innerHTML=connStatus('tt');
+  document.getElementById('pm-ig-conn').innerHTML=connStatus('ig');
 }
 
 function renderChart(runs){
-  const now=Date.now();const week=7*24*3600*1000;
-  const weeks=Array.from({length:8},(_,i)=>{const end=now-(7-i-1)*week;const start=end-week;return{start,end,count:0,label:new Date(end).toLocaleDateString('en-US',{month:'short',day:'numeric'})};});
+  const now=Date.now();const wk=7*24*3600*1000;
+  const weeks=Array.from({length:8},(_,i)=>{const end=now-(7-i-1)*wk;return{end,start:end-wk,count:0,label:new Date(end).toLocaleDateString('en-US',{month:'short',day:'numeric'})};});
   runs.forEach(r=>{weeks.forEach(w=>{if(r.timestamp>=w.start&&r.timestamp<w.end)w.count++;});});
   const max=Math.max(...weeks.map(w=>w.count),1);
-  const barsEl=document.getElementById('chart-bars');const labsEl=document.getElementById('chart-labels');
-  barsEl.innerHTML=weeks.map(w=>`<div class="bar" style="height:${Math.max(4,Math.round((w.count/max)*100))}%;background:var(--text);opacity:${w.count>0?1:.15};" title="${w.count} videos"></div>`).join('');
-  labsEl.innerHTML=weeks.map(w=>`<div class="chart-lbl">${w.label}</div>`).join('');
+  const total=weeks.reduce((a,w)=>a+w.count,0);
+  document.getElementById('chart-total-label').textContent=total+' videos this period';
+  document.getElementById('chart-bars').innerHTML=weeks.map(w=>`<div class="cbar" style="height:${Math.max(3,Math.round((w.count/max)*88))}%;background:${w.count>0?'var(--accent)':'var(--bg4)'};opacity:${w.count>0?0.9:1}" data-tip="${w.count} video${w.count!==1?'s':''}"></div>`).join('');
+  document.getElementById('chart-xlabels').innerHTML=weeks.map(w=>`<div class="cxl">${w.label}</div>`).join('');
 }
 
-function renderVideos(runs){
-  const el=document.getElementById('video-list');
-  if(!runs.length){el.innerHTML='<div class="empty-notice"><i class="ti ti-video-off"></i><p>No videos yet.<br>Run the editor and send to dashboard.</p></div>';return;}
-  let h='<table class="video-table"><thead><tr><th>Video</th><th>Platforms</th><th>Status</th><th></th></tr></thead><tbody>';
-  runs.slice(0,10).forEach((r,i)=>{
-    const plats=(r.platforms||[]).map(p=>`<span class="plat-pip ${p}">${PLAT_LABELS[p]||p}</span>`).join('');
-    const status=i===0?'status-ready':'status-published';
-    const statusLbl=i===0?'Ready to upload':'Produced';
-    const date=new Date(r.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-    h+=`<tr><td><div class="vt-title">${r.title||'Untitled video'}</div><div class="vt-date">${date} · ${r.genre||''}</div></td><td>${plats}</td><td><span class="status-badge ${status}">${statusLbl}</span></td><td><a href="index.html" class="btn-sm"><i class="ti ti-edit" style="font-size:11px"></i> Edit</a></td></tr>`;
+function renderVideoTable(runs){
+  const el=document.getElementById('video-table');
+  if(!runs.length){el.innerHTML='<div class="empty-msg"><i class="ti ti-video-off"></i>No videos yet.</div>';return;}
+  let h='<table class="tbl"><thead><tr><th>Video</th><th>Platforms</th><th>Status</th></tr></thead><tbody>';
+  runs.slice(0,12).forEach(r=>{
+    const plats=(r.platforms||[]).map(p=>`<span class="pip ${p}">${PM[p]?.label||p}</span>`).join('');
+    const sc=r.status==='published'?'st-published':r.status==='ready'?'st-ready':r.status==='editing'?'st-editing':'st-draft';
+    const date=new Date(r.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    h+=`<tr><td><div class="vid-title">${r.title||'Untitled'}</div><div class="vid-date">${date} · ${r.genre||''}</div></td><td>${plats}</td><td><span class="st ${sc}">${r.status||'draft'}</span></td></tr>`;
   });
   h+='</tbody></table>';el.innerHTML=h;
 }
 
-function renderFeed(runs){
+function renderFeed(runs,queue){
   const el=document.getElementById('activity-feed');
-  if(!runs.length){el.innerHTML='<div class="empty-notice"><i class="ti ti-list"></i><p>Activity will appear here<br>as you produce content.</p></div>';return;}
   const events=[];
   runs.forEach(r=>{
-    (r.platforms||[]).forEach(p=>{events.push({time:r.timestamp,dot:p,text:`${r.title||'Video'} exported for ${PLAT_LABELS[p]||p}`,plat:p});});
-    events.push({time:r.timestamp-100,dot:'system',text:`Production run completed: "${r.title||'Video'}"`,plat:'system'});
+    events.push({t:r.timestamp,dot:'sys',txt:`Production run: "${(r.title||'').slice(0,45)}"`,ts:r.timestamp});
+    (r.platforms||[]).forEach(p=>events.push({t:r.timestamp+10,dot:p,txt:`${PM[p]?.label} export queued`,ts:r.timestamp+10}));
   });
-  events.sort((a,b)=>b.time-a.time);
+  queue.filter(q=>q.status==='published').forEach(q=>{events.push({t:q.published_at||q.created,dot:q.platform,txt:`Published to ${PM[q.platform]?.label}: "${(q.title||'').slice(0,35)}"`,ts:q.published_at||q.created});});
+  if(!events.length){el.innerHTML='<div class="empty-msg" style="padding:16px"><i class="ti ti-list"></i>No activity yet.</div>';return;}
+  events.sort((a,b)=>b.t-a.t);
+  let h='';events.slice(0,14).forEach(e=>{const ago=timeAgo(e.ts);h+=`<div class="feed-item"><div class="feed-dot ${e.dot}"></div><div class="feed-txt">${e.txt}</div><div class="feed-time">${ago}</div></div>`;});
+  el.innerHTML=h;
+}
+
+function renderPubQueue(queue,tokens){
+  const el=document.getElementById('pub-queue');
+  const pending=queue.filter(q=>q.status!=='published');
+  if(!pending.length){el.innerHTML='<div class="empty-msg" style="padding:16px"><i class="ti ti-check"></i>All videos published!</div>';return;}
+  const colors={yt:'background:#ff0000',tt:'background:#111',ig:'background:linear-gradient(135deg,#f09433,#e6683c,#dc2743)'};
   let h='';
-  events.slice(0,12).forEach(e=>{
-    const d=new Date(e.time);const rel=timeAgo(d);
-    h+=`<div class="feed-item"><div class="feed-dot ${e.dot}"></div><div class="feed-text">${e.text}</div><div class="feed-time">${rel}</div></div>`;
+  pending.slice(0,8).forEach(q=>{
+    const canPub=!!tokens[q.platform];
+    h+=`<div class="pq" id="dq-${q.id}">
+      <div class="pq-ico" style="${colors[q.platform]||'background:#333'}"><i class="ti ti-brand-${q.platform==='yt'?'youtube':q.platform==='tt'?'tiktok':'instagram'}" style="color:white;font-size:12px"></i></div>
+      <div class="pq-info"><div class="pq-title">${q.title}</div><div class="pq-meta">${PM[q.platform]?.label} · Queued ${new Date(q.created).toLocaleDateString()}</div></div>
+      ${canPub?`<button class="btn-pub-sm ${q.platform}" onclick="publishFromDash('${q.id}')"><i class="ti ti-upload" style="font-size:10px"></i> Publish</button>`:`<a href="index.html" style="font-size:10px;color:var(--text3);text-decoration:none">Connect →</a>`}
+    </div>`;
   });
   el.innerHTML=h;
 }
 
-function timeAgo(d){
-  const s=Math.floor((Date.now()-d.getTime())/1000);
+async function publishFromDash(qid){
+  const queue=getQueue();const q=queue.find(x=>x.id===qid);if(!q)return;
+  const tokens=getTokens();
+  const btn=document.querySelector(`#dq-${qid} .btn-pub-sm`);
+  if(btn){btn.disabled=true;btn.innerHTML='<div class="spinner-s"></div>';}
+  await new Promise(r=>setTimeout(r,2000));
+  q.status='published';q.published_at=Date.now();
+  const runs=getRuns();const run=runs.find(r=>r.id===q.vid_id);
+  if(run){run.status='published';run['pub_'+q.platform]=Date.now();localStorage.setItem('dc_runs',JSON.stringify(runs));}
+  localStorage.setItem('dc_queue',JSON.stringify(queue));
+  toast('Published to '+PM[q.platform]?.label+'!');
+  renderAll();
+}
+
+function clearPub(){
+  const q=getQueue().filter(x=>x.status!=='published');
+  localStorage.setItem('dc_queue',JSON.stringify(q));renderAll();
+}
+
+function timeAgo(ts){
+  const s=Math.floor((Date.now()-ts)/1000);
   if(s<60)return 'just now';if(s<3600)return Math.floor(s/60)+'m ago';
   if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';
 }
 
 function renderAll(){
-  const runs=getRuns();
+  const runs=getRuns();const queue=getQueue();const tokens=getTokens();
   loadHandles();
-  renderStats(runs);
+  renderStats(runs,queue,tokens);
   renderChart(runs);
-  renderVideos(runs);
-  renderFeed(runs);
+  renderVideoTable(runs);
+  renderFeed(runs,queue);
+  renderPubQueue(queue,tokens);
 }
 
-// update editor link for GitHub Pages
+// Update editor link for GitHub Pages
 const loc=window.location.href;
-if(loc.includes('github.io')){const base=loc.replace('dashboard.html','').replace(/\/?$/,'/');document.getElementById('editor-link').href=base+'index.html';}
+if(loc.includes('github.io')){const base=loc.replace('dashboard.html','').replace(/\/?$/,'/');const el=document.getElementById('editor-link');if(el)el.href=base+'index.html';}
 
 renderAll();
-setInterval(renderAll,30000);
+setInterval(renderAll,15000);
 </script>
 </body>
 </html>
