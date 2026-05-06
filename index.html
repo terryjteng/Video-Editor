@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Director's Cut — AI Video Production Studio</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{--bg:#ffffff;--bg2:#f7f7f5;--bg3:#f0efe9;--text:#1a1a1a;--text2:#6b6b6b;--text3:#a0a0a0;--border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);--info-bg:#e6f1fb;--info-text:#0c447c;--success-bg:#eaf3de;--success-text:#27500a;--warn-bg:#faeeda;--warn-text:#633806;--danger-bg:#fcebeb;--danger-text:#791f1f;--radius:8px;--radius-lg:12px}
+@media(prefers-color-scheme:dark){:root{--bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--text:#f5f5f0;--text2:#aeaead;--text3:#6e6e70;--border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);--info-bg:#042c53;--info-text:#85b7eb;--success-bg:#173404;--success-text:#97c459;--warn-bg:#412402;--warn-text:#fac775;--danger-bg:#501313;--danger-text:#f09595}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh}
+.app{max-width:820px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:0.5px solid var(--border)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:40px;height:40px;background:var(--text);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--bg);font-size:20px}
+.logo-text{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.logo-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.dash-link{font-size:12px;padding:6px 12px;border-radius:100px;border:0.5px solid var(--border2);color:var(--text2);display:flex;align-items:center;gap:6px;text-decoration:none;background:var(--bg);transition:.15s}
+.dash-link:hover{background:var(--bg2);color:var(--text)}
+.status-pill{font-size:11px;padding:5px 12px;border-radius:100px;border:0.5px solid var(--border2);color:var(--text2);display:flex;align-items:center;gap:7px;background:var(--bg)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);transition:.3s}
+.status-dot.active{background:#22c55e}
+.status-dot.error{background:#ef4444}
+.nav{display:flex;gap:3px;background:var(--bg2);border-radius:var(--radius-lg);padding:4px;margin-bottom:1.5rem;overflow-x:auto;border:0.5px solid var(--border)}
+.nav-btn{flex:1;min-width:68px;padding:8px 5px;border:none;background:none;font-size:11px;font-weight:500;color:var(--text2);cursor:pointer;border-radius:var(--radius);transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:3px;white-space:nowrap}
+.nav-btn i{font-size:15px}
+.nav-btn.active{background:var(--bg);color:var(--text);border:0.5px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.nav-btn:hover:not(.active){color:var(--text);background:var(--bg)}
+.nav-btn .dot{width:5px;height:5px;border-radius:50%;background:#22c55e;margin-top:1px;display:none}
+.nav-btn.done .dot{display:block}
+.panel{display:none}.panel.active{display:block}
+input[type=file]{display:none}
+.dropzone{border:1.5px dashed var(--border2);border-radius:var(--radius-lg);padding:2.5rem;text-align:center;cursor:pointer;transition:.15s;background:var(--bg)}
+.dropzone:hover{background:var(--bg2);border-color:var(--text3)}
+.dropzone i{font-size:40px;color:var(--text3);display:block;margin-bottom:14px}
+.dropzone h3{font-size:16px;font-weight:500;margin-bottom:6px}
+.dropzone p{font-size:13px;color:var(--text2)}
+.file-bar{background:var(--bg2);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:1rem;border:0.5px solid var(--border)}
+.file-bar i{font-size:18px;color:var(--text2)}
+.file-bar .fn{font-size:13px;font-weight:500}
+.file-bar .fs{font-size:11px;color:var(--text3)}
+.file-bar button{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:2px}
+label.lbl{font-size:12px;color:var(--text2);display:block;margin-bottom:5px;font-weight:500}
+.form-row{margin-bottom:1rem}
+textarea.ta{width:100%;font-size:13px;line-height:1.65;padding:10px 12px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);resize:vertical;font-family:inherit}
+textarea.ta:focus{outline:none;border-color:var(--text3)}
+select.sel,input.inp{width:100%;padding:9px 12px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit}
+select.sel:focus,input.inp:focus{outline:none;border-color:var(--text3)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:540px){.two-col{grid-template-columns:1fr}}
+
+/* Platform multi-select */
+.platform-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:4px}
+.plat-card{border:1.5px solid var(--border);border-radius:var(--radius);padding:10px 12px;cursor:pointer;transition:.15s;background:var(--bg);display:flex;align-items:center;gap:8px}
+.plat-card:hover{border-color:var(--border2);background:var(--bg2)}
+.plat-card.selected{border-color:transparent;background:var(--bg)}
+.plat-card.selected.yt{border-color:#ff0000;background:#fff1f1}
+.plat-card.selected.tt{border-color:#000;background:#f0f0f0}
+.plat-card.selected.ig{border-color:#e1306c;background:#fff0f5}
+.plat-card.selected.yt.dark-ok{background:#3a0000}
+.plat-card i{font-size:20px}
+.plat-card .pn{font-size:12px;font-weight:500}
+.plat-card .ps{font-size:10px;color:var(--text3)}
+.plat-card .chk{margin-left:auto;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent}
+.plat-card.selected .chk{background:var(--text);border-color:var(--text);color:var(--bg)}
+
+.btn-run{width:100%;padding:12px;background:var(--text);color:var(--bg);border:none;border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}
+.btn-run:hover{opacity:.85}
+.btn-run:disabled{opacity:.35;cursor:not-allowed}
+.btn-sm{padding:6px 12px;font-size:12px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text2);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:.15s;font-family:inherit}
+.btn-sm:hover{background:var(--bg2);color:var(--text)}
+.spinner{width:16px;height:16px;border:2px solid rgba(128,128,128,.3);border-top-color:var(--bg);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1rem}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)}
+.card-actions{display:flex;gap:6px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:100px;font-size:11px;font-weight:500}
+.badge-red{background:var(--danger-bg);color:var(--danger-text)}
+.badge-amber{background:var(--warn-bg);color:var(--warn-text)}
+.badge-green{background:var(--success-bg);color:var(--success-text)}
+.badge-blue{background:var(--info-bg);color:var(--info-text)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin-bottom:1rem}
+.stat{background:var(--bg2);border-radius:var(--radius);padding:12px}
+.stat-val{font-size:22px;font-weight:600;line-height:1}
+.stat-lbl{font-size:11px;color:var(--text2);margin-top:4px}
+.director-quote{border-left:3px solid var(--border2);padding:10px 16px;margin-bottom:1rem;background:var(--bg2);border-radius:0 var(--radius) var(--radius) 0}
+.director-quote p{font-size:14px;line-height:1.65;color:var(--text);font-style:italic}
+.director-quote cite{font-size:11px;color:var(--text3);display:block;margin-top:6px;font-style:normal}
+.timeline{position:relative;padding-left:22px;margin-bottom:.5rem}
+.tl-line{position:absolute;left:8px;top:0;bottom:0;width:1px;background:var(--border2)}
+.tl-item{position:relative;margin-bottom:18px}
+.tl-dot{position:absolute;left:-17px;top:5px;width:9px;height:9px;border-radius:50%;border:1.5px solid var(--text2);background:var(--bg)}
+.tl-dot.cut{border-color:#e24b4a;background:var(--danger-bg)}
+.tl-dot.trim{border-color:#ba7517;background:var(--warn-bg)}
+.tl-dot.keep{border-color:#639922;background:var(--success-bg)}
+.tl-tc{font-family:monospace;font-size:11px;color:var(--info-text);margin-bottom:3px}
+.tl-label{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.tl-title{font-size:13px;font-weight:500}
+.tl-note{font-size:13px;line-height:1.55;color:var(--text2)}
+.chap-item{display:flex;align-items:flex-start;gap:14px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.chap-item:last-child{border-bottom:none}
+.chap-tc{font-family:monospace;font-size:12px;color:var(--info-text);min-width:52px;margin-top:1px}
+.chap-title{font-size:13px;font-weight:500}
+.chap-desc{font-size:12px;color:var(--text2);margin-top:3px}
+.clip-card{border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem;margin-bottom:10px;background:var(--bg)}
+.clip-tc{font-family:monospace;font-size:11px;color:var(--text2);margin-bottom:5px}
+.clip-hook{font-size:14px;font-weight:500;margin-bottom:5px;line-height:1.4}
+.clip-why{font-size:13px;color:var(--text2);line-height:1.55}
+.clip-edit{margin-top:10px;padding:9px 11px;background:var(--bg2);border-radius:var(--radius);font-size:12px;color:var(--text2);line-height:1.5}
+.title-opt{padding:10px 12px;border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;background:var(--bg)}
+.title-str{font-size:13px;font-weight:500;margin-bottom:3px}
+.title-why{font-size:11px;color:var(--text3);line-height:1.4}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{background:var(--bg2);border:0.5px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12px}
+.tag.ht{color:var(--info-text)}
+.srt-pre{font-family:monospace;font-size:12px;line-height:1.85;background:var(--bg2);border-radius:var(--radius);padding:1rem;max-height:300px;overflow-y:auto;white-space:pre-wrap;color:var(--text)}
+.empty-state{text-align:center;padding:3.5rem 1rem;color:var(--text3)}
+.empty-state i{font-size:44px;display:block;margin-bottom:14px}
+.empty-state p{font-size:14px;line-height:1.6}
+.sep{border:none;border-top:0.5px solid var(--border);margin:1.25rem 0}
+.stream-badge{display:inline-flex;align-items:center;gap:5px;background:#ef4444;color:white;padding:3px 9px;border-radius:100px;font-size:11px;font-weight:600}
+
+/* Platform output tabs */
+.plat-tabs{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap}
+.plat-tab{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid var(--border2);background:var(--bg);color:var(--text2);transition:.15s;display:flex;align-items:center;gap:6px}
+.plat-tab:hover{background:var(--bg2)}
+.plat-tab.active-yt{border-color:#ff0000;background:#fff1f1;color:#cc0000}
+.plat-tab.active-tt{border-color:#000;background:#f0f0f0;color:#000}
+.plat-tab.active-ig{border-color:#e1306c;background:#fff0f5;color:#c0245a}
+.plat-output{display:none}.plat-output.active{display:block}
+
+.export-block{background:var(--bg2);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:10px;border:0.5px solid var(--border)}
+.export-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.export-icon{width:32px;height:32px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:16px}
+.export-icon.yt{background:#ff0000;color:white}
+.export-icon.tt{background:#000;color:white}
+.export-icon.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:white}
+.export-title{font-size:14px;font-weight:500}
+.export-sub{font-size:11px;color:var(--text3)}
+.spec-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:13px}
+.spec-row:last-child{border-bottom:none}
+.spec-key{color:var(--text2)}
+.spec-val{font-weight:500;font-family:monospace;font-size:12px}
+.dl-btn{width:100%;padding:9px;margin-top:10px;background:var(--text);color:var(--bg);border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .15s}
+.dl-btn:hover{opacity:.8}
+
+.api-notice{background:var(--warn-bg);border:0.5px solid var(--warn-text);border-radius:var(--radius);padding:12px 14px;font-size:12px;color:var(--warn-text);margin-bottom:1.25rem;display:none;line-height:1.5}
+.api-notice a{color:var(--warn-text)}
+.api-notice.show{display:block}
+.copied-toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:var(--bg);padding:10px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;transition:.25s;pointer-events:none;z-index:999}
+.copied-toast.show{opacity:1}
+
+/* Metrics send button */
+.metrics-bar{background:var(--info-bg);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:1rem;border:0.5px solid var(--border2)}
+.metrics-bar p{font-size:12px;color:var(--info-text);line-height:1.4}
+.metrics-bar button{flex-shrink:0;padding:6px 14px;background:var(--info-text);color:white;border:none;border-radius:var(--radius);font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon"><i class="ti ti-movie"></i></div>
+    <div><div class="logo-text">Director's Cut</div><div class="logo-sub">AI video production studio</div></div>
+  </div>
+  <div class="topbar-right">
+    <a class="dash-link" href="dashboard.html" id="dash-link"><i class="ti ti-chart-bar"></i> Social dashboard</a>
+    <div class="status-pill"><div class="status-dot" id="status-dot"></div><span id="status-txt">Ready</span></div>
+  </div>
+</div>
+
+<div class="api-notice" id="api-notice">
+  <strong>API key required:</strong> Enter your Anthropic API key below to enable AI features. Get one free at <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="go('setup')" id="nav-setup"><i class="ti ti-settings"></i>Setup<div class="dot"></div></button>
+  <button class="nav-btn" onclick="go('director')" id="nav-director"><i class="ti ti-movie"></i>Director<div class="dot"></div></button>
+  <button class="nav-btn" onclick="go('chapters')" id="nav-chapters"><i class="ti ti-list-numbers"></i>Chapters<div class="dot"></div></button>
+  <button class="nav-btn" onclick="go('clips')" id="nav-clips"><i class="ti ti-scissors"></i>Clips<div class="dot"></div></button>
+  <button class="nav-btn" onclick="go('platforms')" id="nav-platforms"><i class="ti ti-devices"></i>Platforms<div class="dot"></div></button>
+  <button class="nav-btn" onclick="go('thumbnail')" id="nav-thumbnail"><i class="ti ti-photo"></i>Thumbnail<div class="dot"></div></button>
+  <button class="nav-btn" onclick="go('seo')" id="nav-seo"><i class="ti ti-tags"></i>SEO<div class="dot"></div></button>
+  <button class="nav-btn" onclick="go('captions')" id="nav-captions"><i class="ti ti-closed-caption"></i>Captions<div class="dot"></div></button>
+</div>
+
+<!-- SETUP -->
+<div class="panel active" id="panel-setup">
+  <div class="form-row">
+    <label class="lbl">Anthropic API key <span style="color:var(--text3);font-weight:400">(stored in your browser only)</span></label>
+    <input class="inp" type="password" id="apikey" placeholder="sk-ant-..." oninput="saveKey()">
+  </div>
+  <hr class="sep">
+  <div id="dropzone-wrap">
+    <div class="dropzone" onclick="document.getElementById('fi').click()">
+      <i class="ti ti-video-plus"></i>
+      <h3>Upload your video</h3>
+      <p>MP4, MOV, AVI, MKV — or skip and paste a transcript below</p>
+    </div>
+    <input type="file" id="fi" accept="video/*" onchange="onFile(event)">
+  </div>
+  <div id="file-bar-wrap" style="display:none">
+    <div class="file-bar">
+      <i class="ti ti-video"></i>
+      <div><div class="fn" id="fn">—</div><div class="fs" id="fs">—</div></div>
+      <button onclick="clearFile()"><i class="ti ti-x"></i></button>
+    </div>
+  </div>
+  <div class="form-row" style="margin-top:1rem">
+    <label class="lbl">Video topic & description</label>
+    <textarea class="ta" id="ctx" rows="3" placeholder="e.g. 45-min tutorial: building a B2B SaaS product from scratch. Covers idea validation, MVP in Cursor, Stripe setup, and first 10 customers."></textarea>
+  </div>
+  <div class="two-col">
+    <div class="form-row">
+      <label class="lbl">Video genre / style</label>
+      <select class="sel" id="genre">
+        <optgroup label="Pre-recorded">
+          <option value="tutorial">Tutorial / how-to</option>
+          <option value="vlog">Vlog / documentary</option>
+          <option value="interview">Interview</option>
+          <option value="review">Review / commentary</option>
+          <option value="explainer">Explainer / educational</option>
+        </optgroup>
+        <optgroup label="Streaming VOD">
+          <option value="stream-gaming">Live stream — gaming</option>
+          <option value="stream-podcast">Live stream — podcast / talk show</option>
+          <option value="stream-lifestyle">Live stream — lifestyle</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="form-row">
+      <label class="lbl">Target platforms <span style="color:var(--text3);font-weight:400">(select all that apply)</span></label>
+      <div class="platform-grid">
+        <div class="plat-card selected yt" id="pc-yt" onclick="togglePlat('yt')">
+          <i class="ti ti-brand-youtube" style="color:#ff0000"></i>
+          <div><div class="pn">YouTube</div><div class="ps">16:9 · Long-form</div></div>
+          <div class="chk">✓</div>
+        </div>
+        <div class="plat-card" id="pc-tt" onclick="togglePlat('tt')">
+          <i class="ti ti-brand-tiktok"></i>
+          <div><div class="pn">TikTok</div><div class="ps">9:16 · 60s–10min</div></div>
+          <div class="chk">✓</div>
+        </div>
+        <div class="plat-card" id="pc-ig" onclick="togglePlat('ig')">
+          <i class="ti ti-brand-instagram" style="color:#e1306c"></i>
+          <div><div class="pn">Instagram</div><div class="ps">9:16 · Reels</div></div>
+          <div class="chk">✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <label class="lbl">Paste transcript <span style="color:var(--text3);font-weight:400">(optional — significantly improves outputs)</span></label>
+    <textarea class="ta" id="manual-tx" rows="4" placeholder="[00:00] Hey everyone, welcome back..."></textarea>
+  </div>
+  <button class="btn-run" id="run-btn" onclick="runAll()">
+    <i class="ti ti-sparkles"></i> Run full production suite
+  </button>
+</div>
+
+<!-- DIRECTOR -->
+<div class="panel" id="panel-director">
+  <div id="director-empty" class="empty-state"><i class="ti ti-movie"></i><p>Run the production suite from Setup<br>to get your director's cut.</p></div>
+  <div id="director-content" style="display:none">
+    <div class="stat-grid" id="dir-stats"></div>
+    <div id="director-quote-wrap"></div>
+    <div id="stream-tips-wrap"></div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Scene-by-scene edit decisions</span><button class="btn-sm" onclick="copyVal('tl-copy')"><i class="ti ti-copy"></i> Copy</button></div>
+      <div class="timeline" id="tl-wrap"><div class="tl-line"></div></div>
+      <textarea id="tl-copy" style="display:none"></textarea>
+    </div>
+    <div class="card"><div class="card-header"><span class="card-title">Narrative restructure notes</span></div><div id="narrative-notes" style="font-size:14px;line-height:1.7"></div></div>
+    <div class="card"><div class="card-header"><span class="card-title">Retention & pacing analysis</span></div><div id="retention-notes" style="font-size:14px;line-height:1.7"></div></div>
+  </div>
+</div>
+
+<!-- CHAPTERS -->
+<div class="panel" id="panel-chapters">
+  <div id="chapters-empty" class="empty-state"><i class="ti ti-list-numbers"></i><p>Run the production suite to generate chapter markers.</p></div>
+  <div id="chapters-content" style="display:none">
+    <div class="card">
+      <div class="card-header"><span class="card-title">YouTube chapter markers</span><button class="btn-sm" onclick="copyVal('chap-copy')"><i class="ti ti-copy"></i> Copy for description</button></div>
+      <div id="chap-list"></div>
+      <textarea id="chap-copy" style="display:none"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- CLIPS -->
+<div class="panel" id="panel-clips">
+  <div id="clips-empty" class="empty-state"><i class="ti ti-scissors"></i><p>Run the production suite to identify the best short-form clips.</p></div>
+  <div id="clips-content" style="display:none"><div id="clips-list"></div></div>
+</div>
+
+<!-- PLATFORMS -->
+<div class="panel" id="panel-platforms">
+  <div id="platforms-empty" class="empty-state"><i class="ti ti-devices"></i><p>Run the production suite with platforms selected<br>to get per-platform export packages.</p></div>
+  <div id="platforms-content" style="display:none">
+    <div class="metrics-bar" id="metrics-bar" style="display:none">
+      <p><i class="ti ti-chart-bar" style="font-size:13px"></i> Send these video specs to your Social Media Dashboard to track metrics</p>
+      <button onclick="sendToDash()"><i class="ti ti-upload" style="font-size:12px"></i> Send to dashboard</button>
+    </div>
+    <div class="plat-tabs" id="plat-tabs"></div>
+    <div id="plat-outputs"></div>
+  </div>
+</div>
+
+<!-- THUMBNAIL -->
+<div class="panel" id="panel-thumbnail">
+  <div id="thumb-empty" class="empty-state"><i class="ti ti-photo"></i><p>Run the production suite to generate thumbnail concepts.</p></div>
+  <div id="thumb-content" style="display:none"><div id="thumb-concepts"></div></div>
+</div>
+
+<!-- SEO -->
+<div class="panel" id="panel-seo">
+  <div id="seo-empty" class="empty-state"><i class="ti ti-tags"></i><p>Run the production suite to generate SEO metadata.</p></div>
+  <div id="seo-content" style="display:none"><div id="seo-results"></div></div>
+</div>
+
+<!-- CAPTIONS -->
+<div class="panel" id="panel-captions">
+  <div id="cap-empty" class="empty-state"><i class="ti ti-closed-caption"></i><p>Run the production suite to generate an SRT caption file.</p></div>
+  <div id="cap-content" style="display:none">
+    <div class="card">
+      <div class="card-header"><span class="card-title">SRT captions</span>
+        <div class="card-actions">
+          <button class="btn-sm" onclick="copyEl('srt-pre')"><i class="ti ti-copy"></i> Copy</button>
+          <button class="btn-sm" onclick="dlSRT()"><i class="ti ti-download"></i> Download .srt</button>
+        </div>
+      </div>
+      <div class="srt-pre" id="srt-pre"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="copied-toast" id="toast">Copied!</div>
+
+<script>
+const PLAT_META={
+  yt:{label:'YouTube',icon:'ti-brand-youtube',color:'#ff0000',cls:'yt',ar:'16:9',res:'1920×1080',fps:'30 or 60',bitrate:'8–20 Mbps',format:'MP4 (H.264)',audio:'AAC 320kbps',maxlen:'12 hours',optimal:'8–20 min',captions:'SRT or .vtt',notes:'First 24h views matter most for ranking. Upload between 2–5pm on weekdays.'},
+  tt:{label:'TikTok',icon:'ti-brand-tiktok',color:'#000000',cls:'tt',ar:'9:16',res:'1080×1920',fps:'30 or 60',bitrate:'2–6 Mbps',format:'MP4 or MOV',audio:'AAC 192kbps',maxlen:'10 min',optimal:'21–34 sec or 7 min',captions:'Auto or SRT',notes:'Hook must hit in first 2 sec. Use trending audio. Post 3–5x/week for algorithm growth.'},
+  ig:{label:'Instagram Reels',icon:'ti-brand-instagram',color:'#e1306c',cls:'ig',ar:'9:16',res:'1080×1920',fps:'30',bitrate:'3.5 Mbps',format:'MP4 (H.264)',audio:'AAC 128kbps',maxlen:'15 min',optimal:'7–15 sec or 60 sec',captions:'Auto-captions or burn-in',notes:'Reels get 2–3x more reach than feed posts. Cover frame matters — it shows in your grid. Post before 9am or after 5pm.'}
+};
+
+const S={file:null,ctx:'',genre:'tutorial',selPlats:['yt'],transcript:'',apiKey:'',results:{}};
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const k=localStorage.getItem('dc_apikey')||'';
+  if(k){document.getElementById('apikey').value=k;S.apiKey=k;}
+  else document.getElementById('api-notice').classList.add('show');
+  // update dash link if on GitHub Pages
+  const loc=window.location.href;
+  if(loc.includes('github.io')){
+    const base=loc.replace('index.html','').replace(/\/?$/,'/');
+    document.getElementById('dash-link').href=base+'dashboard.html';
+  }
+});
+
+function saveKey(){S.apiKey=document.getElementById('apikey').value.trim();localStorage.setItem('dc_apikey',S.apiKey);document.getElementById('api-notice').classList.toggle('show',!S.apiKey);}
+function go(p){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));document.getElementById('panel-'+p).classList.add('active');document.getElementById('nav-'+p).classList.add('active');}
+function markDone(p){document.getElementById('nav-'+p).classList.add('done');}
+function onFile(e){const f=e.target.files[0];if(!f)return;S.file=f;document.getElementById('fn').textContent=f.name;document.getElementById('fs').textContent=(f.size/1048576).toFixed(1)+' MB';document.getElementById('dropzone-wrap').style.display='none';document.getElementById('file-bar-wrap').style.display='block';}
+function clearFile(){S.file=null;document.getElementById('fi').value='';document.getElementById('dropzone-wrap').style.display='block';document.getElementById('file-bar-wrap').style.display='none';}
+function setStatus(t,s){document.getElementById('status-txt').textContent=t;document.getElementById('status-dot').className='status-dot'+(s==='active'?' active':s==='error'?' error':'');}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m||'Copied!';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+function togglePlat(p){const c=document.getElementById('pc-'+p);const idx=S.selPlats.indexOf(p);if(idx>-1){if(S.selPlats.length>1){S.selPlats.splice(idx,1);c.classList.remove('selected',p);}}else{S.selPlats.push(p);c.classList.add('selected',p);}}
+
+async function claude(prompt,max){
+  if(!S.apiKey)throw new Error('No API key');
+  max=max||1000;
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:max,messages:[{role:'user',content:prompt}]})});
+  if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API error');}
+  const d=await r.json();return d.content&&d.content[0]?d.content[0].text:'';
+}
+function parseJSON(raw){try{return JSON.parse(raw.replace(/```json|```/g,'').trim())}catch(e){return null}}
+function isStream(){return S.genre.startsWith('stream-');}
+
+async function runAll(){
+  S.ctx=document.getElementById('ctx').value.trim();
+  if(!S.ctx){alert('Please add a topic description first.');return;}
+  if(!S.apiKey){alert('Please enter your Anthropic API key.');return;}
+  S.genre=document.getElementById('genre').value;
+  S.transcript=document.getElementById('manual-tx').value.trim();
+  const btn=document.getElementById('run-btn');
+  btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Producing...';setStatus('Producing','active');
+  try{
+    await Promise.all([runDirector(),runChapters(),runClips(),runPlatforms(),runThumbnail(),runSEO(),runCaptions()]);
+    setStatus('Done','active');btn.innerHTML='<i class="ti ti-check"></i> Production complete — explore tabs above';
+    saveRunToStorage();
+    setTimeout(()=>go('director'),700);
+  }catch(err){
+    setStatus('Error','error');btn.disabled=false;btn.innerHTML='<i class="ti ti-sparkles"></i> Run full production suite';
+    alert('Error: '+err.message);
+  }
+}
+
+function saveRunToStorage(){
+  const run={timestamp:Date.now(),title:S.ctx.slice(0,80),platforms:S.selPlats,genre:S.genre,results:S.results};
+  const runs=JSON.parse(localStorage.getItem('dc_runs')||'[]');
+  runs.unshift(run);
+  localStorage.setItem('dc_runs',JSON.stringify(runs.slice(0,20)));
+  localStorage.setItem('dc_latest',JSON.stringify(run));
+}
+
+function sendToDash(){
+  saveRunToStorage();
+  showToast('Sent to dashboard!');
+  setTimeout(()=>{window.location.href=document.getElementById('dash-link').href;},900);
+}
+
+async function runDirector(){
+  const txH=S.transcript?'\n\nTranscript excerpt:\n'+S.transcript.slice(0,700):'';
+  const sCtx=isStream()?`\nThis is a LIVE STREAM VOD (${S.genre.replace('stream-','')}). Focus on trimming dead air, highlight moments, and restructuring for replay viewers.`:'';
+  const platList=S.selPlats.map(p=>PLAT_META[p]?.label).join(', ');
+  const raw=await claude(`You are a seasoned film director and senior video editor with 20+ years experience.${sCtx}
+Video: "${S.ctx}" | Genre: ${S.genre} | Platforms: ${platList}${txH}
+Return ONLY valid JSON:
+{"director_note":"2-3 sentence opinionated director's note in first person","score":7,"score_label":"Solid rough cut","estimated_duration":"38 min","recommended_duration":"22 min","cuts_count":8,"stream_specific_tips":${isStream()?'"3-4 stream VOD editing tips"':'null'},"scenes":[{"timestamp":"00:00-01:30","action":"KEEP","label":"Cold open","note":"Strong hook.","dot":"keep"},{"timestamp":"01:30-04:00","action":"TRIM","label":"Intro ramble","note":"Cut to 90s.","dot":"trim"},{"timestamp":"04:00-06:30","action":"CUT","label":"Dead air","note":"Full cut.","dot":"cut"}],"narrative_notes":"2-3 paragraphs on story structure.","retention_notes":"2-3 paragraphs on pacing and retention."}`,900);
+  const d=parseJSON(raw);if(!d)return;S.results.director=d;renderDirector(d);markDone('director');
+}
+
+async function runChapters(){
+  const txH=S.transcript?'\n\nTranscript:\n'+S.transcript.slice(0,600):'';
+  const raw=await claude(`YouTube chapter expert. Video: "${S.ctx}" | Genre: ${S.genre}${txH}
+Return ONLY valid JSON: {"chapters":[{"timestamp":"0:00","title":"Intro","description":"What this covers"},{"timestamp":"2:30","title":"Section","description":"Details"}]}
+Generate 6-10 chapters starting at 0:00.`,600);
+  const d=parseJSON(raw);if(!d||!d.chapters)return;S.results.chapters=d.chapters;renderChapters(d.chapters);markDone('chapters');
+}
+
+async function runClips(){
+  const txH=S.transcript?'\n\nTranscript:\n'+S.transcript.slice(0,600):'';
+  const platList=S.selPlats.map(p=>PLAT_META[p]?.label).join(', ');
+  const raw=await claude(`Short-form content strategist. Target platforms: ${platList}.
+Video: "${S.ctx}"${txH}
+Return ONLY valid JSON: {"clips":[{"timestamp":"12:30-15:45","duration":"3m15s","hook":"First 3 sec hook","why":"Why this works","platforms":["TikTok","Reels"],"viral_score":8,"edit_note":"Specific cut instruction"}]}
+Identify 4-6 clips targeting the selected platforms.`,800);
+  const d=parseJSON(raw);if(!d||!d.clips)return;S.results.clips=d.clips;renderClips(d.clips);markDone('clips');
+}
+
+async function runPlatforms(){
+  const results={};
+  const platLabels=S.selPlats.map(p=>PLAT_META[p]?.label).join(', ');
+  const raw=await claude(`You are a platform-specific video editor. For each platform, provide tailored editing instructions.
+Video: "${S.ctx}" | Genre: ${S.genre} | Selected platforms: ${platLabels}
+Return ONLY valid JSON where keys are platform codes from [yt,tt,ig] that were selected (${S.selPlats.join(',')}):
+{
+  ${S.selPlats.map(p=>`"${p}":{"hook":"Opening 3-5 second hook script for this platform","cut_style":"Editing style recommendation specific to this platform","music_tip":"Music/audio recommendation","caption_style":"Caption style recommendation","cta":"Call to action text optimized for this platform","post_time":"Best time to post","edit_checklist":["check 1","check 2","check 3","check 4","check 5"]}`).join(',\n  ')}
+}`,900);
+  const d=parseJSON(raw);if(!d)return;S.results.platforms=d;renderPlatforms(d);markDone('platforms');
+}
+
+async function runThumbnail(){
+  const platList=S.selPlats.map(p=>PLAT_META[p]?.label).join(', ');
+  const raw=await claude(`YouTube thumbnail designer. Platforms: ${platList}.
+Video: "${S.ctx}" | Genre: ${S.genre}
+Return ONLY valid JSON: {"concepts":[{"name":"The Contrast","style":"Bold text over split","headline":"TITLE TEXT","subtext":"optional","bg_color":"#1a1a2e","accent_color":"#FF6B35","text_color":"#FFFFFF","layout":"left-text right-image","subject":"visual subject","why_it_works":"CTR psychology"}]}
+Make 3 distinct concepts.`,700);
+  const d=parseJSON(raw);if(!d||!d.concepts)return;S.results.thumbnails=d.concepts;renderThumbnails(d.concepts);markDone('thumbnail');
+}
+
+async function runSEO(){
+  const txH=S.transcript?'\n\nTranscript:\n'+S.transcript.slice(0,400):'';
+  const platList=S.selPlats.map(p=>PLAT_META[p]?.label).join(', ');
+  const raw=await claude(`YouTube SEO expert. Platforms: ${platList}.
+Video: "${S.ctx}" | Genre: ${S.genre}${txH}
+Return ONLY valid JSON: {"yt_titles":[{"title":"A","why":"why"},{"title":"B","why":"why"},{"title":"C","why":"why"}],"description":"Full description 200-250 words with [CHAPTERS] placeholder","tags":["t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11","t12"],"hashtags":["#h1","#h2","#h3","#h4","#h5"],"tiktok_caption":"Caption under 130 chars","tiktok_hashtags":["#tt1","#tt2","#tt3","#tt4","#tt5"],"ig_caption":"Instagram caption with emojis under 150 chars","ig_hashtags":["#ig1","#ig2","#ig3","#ig4","#ig5"]}`,800);
+  const d=parseJSON(raw);if(!d)return;S.results.seo=d;renderSEO(d);markDone('seo');
+}
+
+async function runCaptions(){
+  const base=S.transcript||`[00:00] Welcome. Today we're covering ${S.ctx}.\n[00:30] Let's start with the fundamentals.\n[01:15] Here's the first key point.\n[02:00] Moving on.\n[03:30] This is where things get interesting.\n[05:00] Let me show you exactly how this works.\n[07:00] Common mistakes to avoid.\n[09:00] My top recommendations.\n[11:00] Quick recap.\n[12:00] Thanks for watching.`;
+  const raw=await claude(`Convert to SRT subtitle format. Max 2 lines per entry, max 42 chars per line. Return ONLY the SRT content.\n\n${base.slice(0,800)}`,700);
+  S.results.captions=raw;renderCaptions(raw);markDone('captions');
+}
+
+function renderDirector(d){
+  document.getElementById('director-empty').style.display='none';
+  document.getElementById('director-content').style.display='block';
+  document.getElementById('dir-stats').innerHTML=`<div class="stat"><div class="stat-val">${d.score||'—'}<span style="font-size:13px;color:var(--text3)">/10</span></div><div class="stat-lbl">${d.score_label||'Score'}</div></div><div class="stat"><div class="stat-val">${d.estimated_duration||'—'}</div><div class="stat-lbl">Est. duration</div></div><div class="stat"><div class="stat-val">${d.recommended_duration||'—'}</div><div class="stat-lbl">Recommended</div></div><div class="stat"><div class="stat-val">${d.cuts_count||'—'}</div><div class="stat-lbl">Suggested cuts</div></div>`;
+  if(d.director_note)document.getElementById('director-quote-wrap').innerHTML=`<div class="director-quote"><p>"${d.director_note}"</p><cite>— Director's note</cite></div>`;
+  if(d.stream_specific_tips&&isStream())document.getElementById('stream-tips-wrap').innerHTML=`<div class="card"><div class="card-header"><span class="card-title"><span class="stream-badge"><i class="ti ti-broadcast" style="font-size:11px"></i> LIVE</span> Stream VOD tips</span></div><div style="font-size:13px;line-height:1.65;color:var(--text2)">${d.stream_specific_tips}</div></div>`;
+  let tlH='<div class="tl-line"></div>',tlT='';
+  (d.scenes||[]).forEach(sc=>{const dot=sc.dot||'keep';tlH+=`<div class="tl-item"><div class="tl-dot ${dot}"></div><div class="tl-tc">${sc.timestamp||''}</div><div class="tl-label"><span class="tl-title">${sc.label||''}</span><span class="badge ${dot==='cut'?'badge-red':dot==='trim'?'badge-amber':'badge-green'}">${sc.action||dot}</span></div><div class="tl-note">${sc.note||''}</div></div>`;tlT+=`[${sc.timestamp}] ${sc.action} — ${sc.label}: ${sc.note}\n`;});
+  document.getElementById('tl-wrap').innerHTML=tlH;document.getElementById('tl-copy').value=tlT;
+  if(d.narrative_notes)document.getElementById('narrative-notes').innerHTML=`<p>${d.narrative_notes}</p>`;
+  if(d.retention_notes)document.getElementById('retention-notes').innerHTML=`<p>${d.retention_notes}</p>`;
+}
+
+function renderChapters(chapters){
+  document.getElementById('chapters-empty').style.display='none';
+  document.getElementById('chapters-content').style.display='block';
+  let h='',c='';chapters.forEach(ch=>{h+=`<div class="chap-item"><div class="chap-tc">${ch.timestamp}</div><div><div class="chap-title">${ch.title}</div><div class="chap-desc">${ch.description||''}</div></div></div>`;c+=`${ch.timestamp} ${ch.title}\n`;});
+  document.getElementById('chap-list').innerHTML=h;document.getElementById('chap-copy').value=c.trim();
+}
+
+function renderClips(clips){
+  document.getElementById('clips-empty').style.display='none';
+  document.getElementById('clips-content').style.display='block';
+  let h='';clips.forEach(c=>{const sc=c.viral_score>=8?'badge-green':c.viral_score>=6?'badge-amber':'badge-red';const pl=(c.platforms||[]).map(p=>`<span class="badge badge-blue">${p}</span>`).join(' ');h+=`<div class="clip-card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="display:flex;gap:5px">${pl}</div><span class="badge ${sc}"><i class="ti ti-flame" style="font-size:11px"></i> ${c.viral_score}/10</span></div><div class="clip-tc"><i class="ti ti-clock" style="font-size:11px"></i> ${c.timestamp} · ${c.duration}</div><div class="clip-hook">"${c.hook}"</div><div class="clip-why">${c.why}</div>${c.edit_note?`<div class="clip-edit"><i class="ti ti-cut" style="font-size:11px"></i> <strong>Edit note:</strong> ${c.edit_note}</div>`:''}</div>`;});
+  document.getElementById('clips-list').innerHTML=h;
+}
+
+function renderPlatforms(data){
+  document.getElementById('platforms-empty').style.display='none';
+  document.getElementById('platforms-content').style.display='block';
+  document.getElementById('metrics-bar').style.display='flex';
+  const tabsEl=document.getElementById('plat-tabs');
+  const outputsEl=document.getElementById('plat-outputs');
+  tabsEl.innerHTML='';outputsEl.innerHTML='';
+  S.selPlats.forEach((p,i)=>{
+    const m=PLAT_META[p];const ai=data[p]||{};
+    tabsEl.innerHTML+=`<button class="plat-tab${i===0?' active-'+p:''}" id="ptab-${p}" onclick="switchPlatTab('${p}')">${p==='yt'?'<i class="ti ti-brand-youtube" style="color:#ff0000"></i>':p==='tt'?'<i class="ti ti-brand-tiktok"></i>':'<i class="ti ti-brand-instagram" style="color:#e1306c"></i>'} ${m.label}</button>`;
+    const checks=(ai.edit_checklist||[]).map(c=>`<li style="font-size:13px;padding:5px 0;border-bottom:0.5px solid var(--border)">${c}</li>`).join('');
+    outputsEl.innerHTML+=`<div class="plat-output${i===0?' active':''}" id="pout-${p}">
+      <div class="export-block">
+        <div class="export-header"><div class="export-icon ${p}" style="${p==='ig'?'background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)':p==='yt'?'background:#ff0000':'background:#000'}"><i class="ti ${m.icon}" style="color:white;font-size:16px"></i></div><div><div class="export-title">${m.label} — Export specs</div><div class="export-sub">Platform-optimized settings</div></div></div>
+        <div class="spec-row"><span class="spec-key">Aspect ratio</span><span class="spec-val">${m.ar}</span></div>
+        <div class="spec-row"><span class="spec-key">Resolution</span><span class="spec-val">${m.res}</span></div>
+        <div class="spec-row"><span class="spec-key">Frame rate</span><span class="spec-val">${m.fps} fps</span></div>
+        <div class="spec-row"><span class="spec-key">Bitrate</span><span class="spec-val">${m.bitrate}</span></div>
+        <div class="spec-row"><span class="spec-key">Format</span><span class="spec-val">${m.format}</span></div>
+        <div class="spec-row"><span class="spec-key">Audio</span><span class="spec-val">${m.audio}</span></div>
+        <div class="spec-row"><span class="spec-key">Max length</span><span class="spec-val">${m.maxlen}</span></div>
+        <div class="spec-row"><span class="spec-key">Sweet spot</span><span class="spec-val">${m.optimal}</span></div>
+        <button class="dl-btn" onclick="dlSpec('${p}')"><i class="ti ti-download"></i> Download ${m.label} spec sheet (.txt)</button>
+      </div>
+      ${ai.hook?`<div class="card"><div class="card-header"><span class="card-title">Platform hook (first 3–5 sec)</span><button class="btn-sm" onclick="cpText('${(ai.hook||'').replace(/'/g,"\\'")}')"><i class="ti ti-copy"></i></button></div><p style="font-size:14px;font-weight:500;line-height:1.5">"${ai.hook}"</p></div>`:''}
+      ${ai.cut_style?`<div class="card"><div class="card-header"><span class="card-title">Editing style for ${m.label}</span></div><p style="font-size:14px;line-height:1.65">${ai.cut_style}</p></div>`:''}
+      ${ai.cta?`<div class="card"><div class="card-header"><span class="card-title">Call to action</span><button class="btn-sm" onclick="cpText('${(ai.cta||'').replace(/'/g,"\\'")}')"><i class="ti ti-copy"></i></button></div><p style="font-size:14px">${ai.cta}</p></div>`:''}
+      ${checks?`<div class="card"><div class="card-header"><span class="card-title">Pre-upload checklist for ${m.label}</span></div><ul style="list-style:none;padding:0">${checks}</ul></div>`:''}
+      <div class="card"><div class="card-header"><span class="card-title">Platform notes</span></div><p style="font-size:13px;line-height:1.65;color:var(--text2)">${m.notes}</p>${ai.post_time?`<p style="font-size:13px;margin-top:8px"><strong>Best post time:</strong> ${ai.post_time}</p>`:''}</div>
+    </div>`;
+  });
+}
+
+function switchPlatTab(p){
+  document.querySelectorAll('.plat-tab').forEach(t=>t.className='plat-tab');
+  document.querySelectorAll('.plat-output').forEach(o=>o.classList.remove('active'));
+  document.getElementById('ptab-'+p).classList.add('active-'+p);
+  document.getElementById('pout-'+p).classList.add('active');
+}
+
+function dlSpec(p){
+  const m=PLAT_META[p];const ai=(S.results.platforms||{})[p]||{};
+  let txt=`${m.label.toUpperCase()} EXPORT SPEC SHEET\nGenerated by Director's Cut\n\nVideo: ${S.ctx}\n\n`;
+  txt+=`TECHNICAL SPECS\n${'='.repeat(40)}\nAspect ratio: ${m.ar}\nResolution: ${m.res}\nFrame rate: ${m.fps} fps\nBitrate: ${m.bitrate}\nFormat: ${m.format}\nAudio: ${m.audio}\nMax length: ${m.maxlen}\nOptimal length: ${m.optimal}\nCaptions: ${m.captions}\n\n`;
+  if(ai.hook)txt+=`PLATFORM HOOK\n${'='.repeat(40)}\n"${ai.hook}"\n\n`;
+  if(ai.cut_style)txt+=`EDITING STYLE\n${'='.repeat(40)}\n${ai.cut_style}\n\n`;
+  if(ai.music_tip)txt+=`MUSIC/AUDIO\n${'='.repeat(40)}\n${ai.music_tip}\n\n`;
+  if(ai.caption_style)txt+=`CAPTIONS\n${'='.repeat(40)}\n${ai.caption_style}\n\n`;
+  if(ai.cta)txt+=`CALL TO ACTION\n${'='.repeat(40)}\n${ai.cta}\n\n`;
+  if(ai.post_time)txt+=`BEST POST TIME\n${'='.repeat(40)}\n${ai.post_time}\n\n`;
+  if(ai.edit_checklist&&ai.edit_checklist.length)txt+=`PRE-UPLOAD CHECKLIST\n${'='.repeat(40)}\n${ai.edit_checklist.map((c,i)=>`${i+1}. ${c}`).join('\n')}\n\n`;
+  txt+=`PLATFORM NOTES\n${'='.repeat(40)}\n${m.notes}`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));a.download=`${p}-spec-${Date.now()}.txt`;a.click();
+}
+
+function renderThumbnails(concepts){
+  document.getElementById('thumb-empty').style.display='none';
+  document.getElementById('thumb-content').style.display='block';
+  let h='';concepts.forEach((c,i)=>{const bg=c.bg_color||'#1a1a2e',ac=c.accent_color||'#FF6B35',tc=c.text_color||'#FFF';h+=`<div class="card"><div class="card-header"><span class="card-title">Concept ${i+1}: ${c.name||''}</span></div><div style="background:${bg};border-radius:var(--radius);aspect-ratio:16/9;display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem;margin-bottom:12px;min-height:160px"><div style="font-size:clamp(16px,3vw,26px);font-weight:700;color:${tc};line-height:1.1;max-width:65%;margin-bottom:8px">${c.headline||''}</div>${c.subtext?`<div style="font-size:13px;color:${ac};font-weight:500">${c.subtext}</div>`:''}<div style="margin-top:10px;padding:3px 10px;background:${ac};border-radius:4px;font-size:11px;font-weight:600;color:${tc};display:inline-block">${c.style||''}</div></div><p style="font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:5px">${c.why_it_works||''}</p><p style="font-size:12px;color:var(--text3)"><strong>Visual:</strong> ${c.subject||''}</p></div>`;});
+  document.getElementById('thumb-concepts').innerHTML=h;
+}
+
+function renderSEO(d){
+  document.getElementById('seo-empty').style.display='none';
+  document.getElementById('seo-content').style.display='block';
+  let h='';
+  if(d.yt_titles&&S.selPlats.includes('yt')){h+=`<div class="card"><div class="card-header"><span class="card-title"><i class="ti ti-brand-youtube" style="color:#ff0000;font-size:14px"></i> YouTube titles</span></div>`;d.yt_titles.forEach(t=>{h+=`<div class="title-opt"><div style="flex:1"><div class="title-str">${t.title}</div><div class="title-why">${t.why||''}</div></div><button class="btn-sm" onclick="cpText('${(t.title||'').replace(/'/g,"\\'")}')"><i class="ti ti-copy"></i></button></div>`;});h+=`</div>`;}
+  if(d.description&&S.selPlats.includes('yt')){h+=`<div class="card"><div class="card-header"><span class="card-title">YouTube description</span><button class="btn-sm" onclick="cpText(document.getElementById('yt-desc').textContent)"><i class="ti ti-copy"></i> Copy</button></div><p id="yt-desc" style="font-size:13px;line-height:1.7;white-space:pre-wrap">${d.description}</p></div>`;}
+  if(d.tags){h+=`<div class="card"><div class="card-header"><span class="card-title">Tags & hashtags</span></div><div class="tags">${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>${d.hashtags?'<div class="tags" style="margin-top:6px">'+d.hashtags.map(t=>`<span class="tag ht">${t}</span>`).join('')+'</div>':''}</div>`;}
+  if(d.tiktok_caption&&S.selPlats.includes('tt')){h+=`<div class="card"><div class="card-header"><span class="card-title"><i class="ti ti-brand-tiktok" style="font-size:14px"></i> TikTok caption</span><button class="btn-sm" onclick="cpText('${(d.tiktok_caption||'').replace(/'/g,"\\'")}')"><i class="ti ti-copy"></i></button></div><p style="font-size:13px;font-weight:500;margin-bottom:10px">${d.tiktok_caption}</p>${d.tiktok_hashtags?'<div class="tags">'+d.tiktok_hashtags.map(t=>`<span class="tag ht">${t}</span>`).join('')+'</div>':''}</div>`;}
+  if(d.ig_caption&&S.selPlats.includes('ig')){h+=`<div class="card"><div class="card-header"><span class="card-title"><i class="ti ti-brand-instagram" style="color:#e1306c;font-size:14px"></i> Instagram caption</span><button class="btn-sm" onclick="cpText('${(d.ig_caption||'').replace(/'/g,"\\'")}')"><i class="ti ti-copy"></i></button></div><p style="font-size:13px;font-weight:500;margin-bottom:10px">${d.ig_caption}</p>${d.ig_hashtags?'<div class="tags">'+d.ig_hashtags.map(t=>`<span class="tag ht">${t}</span>`).join('')+'</div>':''}</div>`;}
+  document.getElementById('seo-results').innerHTML=h;
+}
+
+function renderCaptions(srt){document.getElementById('cap-empty').style.display='none';document.getElementById('cap-content').style.display='block';document.getElementById('srt-pre').textContent=srt;}
+function copyVal(id){const e=document.getElementById(id);navigator.clipboard.writeText(e.value||'');showToast();}
+function copyEl(id){navigator.clipboard.writeText(document.getElementById(id).textContent||'');showToast();}
+function cpText(t){navigator.clipboard.writeText(t);showToast();}
+function dlSRT(){const c=document.getElementById('srt-pre').textContent;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/plain'}));a.download='captions.srt';a.click();}
+</script>
+</body>
+</html>
